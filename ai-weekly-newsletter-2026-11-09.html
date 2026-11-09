@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI in Asset Management No. 8</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,800;1,6..72,400;1,6..72,600&family=Archivo+Narrow:wght@500;700&display=swap">
+<style>
+/* Layout: a broadsheet front page. Nameplate, folio line, special-edition lead set as a lead story, then sections in newspaper columns; explainer and diary as boxed sidebars. */
+:root {
+  --paper: #EEEAE0;
+  --paper-2: #E4DFD2;
+  --ink: #1C1B18;
+  --ink-soft: #4A4740;
+  --rule: #2A2823;
+  --hair: #B9B2A2;
+  --accent: #081264;
+  --font-nameplate: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-head: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-label: "Archivo Narrow", "Arial Narrow", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #171612; --paper-2: #211F1A; --ink: #ECE6D8; --ink-soft: #B5AE9E;
+    --rule: #D9D2C2; --hair: #4A463D; --accent: #9EADF5; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #171612; --paper-2: #211F1A; --ink: #ECE6D8; --ink-soft: #B5AE9E;
+  --rule: #D9D2C2; --hair: #4A463D; --accent: #9EADF5; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 48px;
+}
+.sheet { max-width: 1120px; margin: 0 auto; }
+a { color: inherit; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.ears { display: flex; justify-content: space-between; gap: 16px; font-family: var(--font-label); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.ear { border: 1px solid var(--hair); padding: 6px 10px; max-width: 260px; line-height: 1.3; }
+.nameplate { text-align: center; padding-block: 8px 6px; }
+.nameplate h1 { font-family: var(--font-nameplate); font-weight: 800; font-size: clamp(34px, 7.2vw, 80px); line-height: 1.02; margin: 0; letter-spacing: -.015em; text-wrap: balance; }
+.motto { font-family: var(--font-head); font-style: italic; color: var(--ink-soft); font-size: 15px; margin-top: 6px; max-width: 70ch; margin-inline: auto; text-wrap: balance; }
+.folio { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px; border-top: 3px double var(--rule); border-bottom: 1px solid var(--rule); padding-block: 6px; margin-top: 10px; font-family: var(--font-label); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+.folio .special { color: var(--accent); font-weight: 700; }
+
+.standfirst { font-family: var(--font-head); font-style: italic; font-size: 18px; color: var(--ink-soft); text-align: center; max-width: 62ch; margin: 18px auto 6px; text-wrap: balance; }
+
+.section-head { display: flex; align-items: center; gap: 12px; margin-block: 34px 16px; }
+.section-head h2 { font-family: var(--font-label); font-weight: 700; font-size: 14px; letter-spacing: .18em; text-transform: uppercase; margin: 0; white-space: nowrap; }
+.section-head::before, .section-head::after { content: ""; flex: 1; border-top: 1px solid var(--rule); }
+
+.lead { border-bottom: 1px solid var(--rule); padding-bottom: 22px; }
+.lead h3 { font-family: var(--font-head); font-weight: 800; font-size: clamp(32px, 5vw, 58px); line-height: 1.04; margin: 0 0 10px; text-wrap: balance; letter-spacing: -.01em; }
+.lead .intro { font-size: 19px; max-width: 70ch; margin: 0 0 18px; }
+.figures { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 36px; border-top: 1px solid var(--rule); }
+.figures li { display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: 4px 14px; padding-block: 14px; border-bottom: 1px solid var(--hair); align-content: start; }
+.figures .n { font-family: var(--font-label); font-weight: 700; font-size: 13px; letter-spacing: .08em; color: var(--ink-soft); font-variant-numeric: tabular-nums; padding-top: 10px; }
+.figures .fig { display: block; font-family: var(--font-head); font-weight: 800; font-size: clamp(30px, 4vw, 42px); line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; letter-spacing: -.01em; margin-bottom: 6px; }
+.figures p { margin: 0; hyphens: auto; min-width: 0; }
+
+.columns { column-count: 3; column-gap: 32px; column-rule: 1px solid var(--hair); }
+.story { break-inside: avoid; margin: 0 0 22px; padding-bottom: 18px; border-bottom: 1px solid var(--hair); }
+.story h3 { font-family: var(--font-head); font-weight: 800; font-size: 23px; line-height: 1.15; margin: 0 0 8px; text-wrap: balance; }
+.kicker { font-family: var(--font-label); font-weight: 700; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 6px; }
+.story p, .lead p { margin: 0 0 10px; hyphens: auto; }
+.why { font-size: 15.5px; font-style: italic; border-left: 2px solid var(--accent); padding-left: 10px; margin-top: 10px !important; color: var(--ink-soft); }
+.why b { font-family: var(--font-label); font-style: normal; font-weight: 700; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink); display: block; margin-bottom: 2px; }
+.lead .why { max-width: 70ch; margin-top: 16px !important; }
+
+.back { display: grid; grid-template-columns: 1.35fr 1fr; gap: 28px; margin-top: 30px; }
+.back > * { min-width: 0; }
+.explainer { border: 2px solid var(--rule); background: var(--paper-2); padding: 18px 20px; }
+.explainer .label, .box .label { font-family: var(--font-label); font-weight: 700; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+.explainer h3 { font-family: var(--font-head); font-weight: 800; font-size: 34px; line-height: 1.05; margin: 4px 0 10px; }
+.explainer p { margin: 0 0 10px; }
+.box { border-top: 3px double var(--rule); border-bottom: 1px solid var(--rule); padding-block: 12px; }
+.box + .box { margin-top: 24px; }
+.box h3 { font-family: var(--font-head); font-weight: 800; font-size: 21px; line-height: 1.2; margin: 6px 0 6px; }
+.box p { margin: 0 0 8px; }
+.diary { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 12px; }
+.diary li { display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: baseline; border-bottom: 1px dotted var(--hair); padding-bottom: 10px; }
+.diary li:last-child { border-bottom: 0; }
+.diary .when { font-family: var(--font-label); font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+.diary .what b { font-family: var(--font-head); }
+.diary .what { font-size: 15.5px; min-width: 0; }
+
+footer { margin-top: 36px; border-top: 3px double var(--rule); padding-top: 10px; font-family: var(--font-label); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+
+@media (max-width: 920px) {
+  .columns { column-count: 2; }
+  .back { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  body { font-size: 16.5px; }
+  .columns { column-count: 1; }
+  .figures { grid-template-columns: minmax(0, 1fr); }
+  .ear { display: none; }
+  .folio { justify-content: center; text-align: center; }
+  .diary li { grid-template-columns: 56px 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="ears">
+    <div class="ear">For Moody's asset management colleagues</div>
+    <div class="ear">Price: free, but it could land your next six-figure MCP deal $$$</div>
+  </div>
+
+  <header class="nameplate">
+    <h1>AI in Asset Management</h1>
+    <div class="motto">The AI sell-off hits the AI labs and hedge funds, FactSet teams up with Hamilton Lane, and Citadel Securities builds agents with clients. Also, the semantic layer explained.</div>
+  </header>
+
+  <div class="folio">
+    <span>No. 8</span>
+    <span>Week ending Sunday 8 November 2026</span>
+    <span>Monday 9 November</span>
+  </div>
+
+  <p class="standfirst">Hi everyone. This is this week's edition of the AI in Asset Management newsletter. About 1,200 words, a 5-minute read.</p>
+
+  <div class="section-head"><h2>Key stories</h2></div>
+
+  <article class="lead">
+    <span class="kicker">Markets</span>
+    <h3>The AI sell-off spreads from stocks to the AI labs</h3>
+    <p class="intro">On 5 Nov the S&amp;P 500 fell 4.4%, its worst day since April 2025, and the Nasdaq 5.5%. AI data centre stocks led the fall, on worries that expensive borrowing and the midterm results could slow the build-out (<a href="https://www.nbcbayarea.com/news/national-international/november-5-stock-market/4170982/" target="_blank" rel="noopener">AP</a>). Earlier in the week the WSJ reported that Elliott warned investors the risks it sees could trigger a severe market correction, with debt-funded AI spending among them (<a href="https://hedgeweek.com/news/elliott-warns-of-major-market-downturn-as-hedge-fund-returns-lag" target="_blank" rel="noopener">Hedgeweek</a>).</p>
+    <p class="intro">The labs felt it too: OpenAI closed $11bn at a $1.25trn valuation, below the $1.4trn it first sought, Bloomberg <a href="https://sg.finance.yahoo.com/news/openai-closes-11-billion-funding-213757127.html" target="_blank" rel="noopener">reported</a>, and Reuters <a href="https://www.cp24.com/news/money/2026/11/06/ai-backlash-could-threaten-anthropic-ipo-timing-potential-investors-say-reuters-exclusive/" target="_blank" rel="noopener">reported</a> investors are questioning Anthropic's IPO valuation and timing.</p>
+    <p class="why"><b>Why it matters</b>Many of our clients have lent to or invested in the AI build-out, so this is a good moment to talk to them about their exposure.</p>
+  </article>
+
+  <div class="columns" style="margin-top:22px">
+    <article class="story">
+      <span class="kicker">Hedge funds</span>
+      <h3>Hedge funds hit by the AI rout</h3>
+      <p>In one week, hedge funds sold almost two years' worth of AI stock buying, on doubts about valuations and whether AI spending will last, Goldman Sachs prime brokerage data showed (<a href="https://hedgeweek.com/news/hedge-funds-unwind-ai-bets-as-tech-selloff-accelerates" target="_blank" rel="noopener">Hedgeweek</a>). October was painful. Engineers Gate, a Moody's client, was down 5.5% by 23 Oct as AI and tech stocks reversed, and cut most of its fundamental equities team (<a href="https://hedgeweek.com/news/engineers-gate-cuts-majority-of-fundamental-equities-team-after-october-losses" target="_blank" rel="noopener">Hedgeweek</a>). In Asia, Aspex lost 16%, Bloomberg reported (<a href="https://hedgeweek.com/news/asia-hedge-funds-hit-by-ai-selloff-as-leveraged-bets-trigger-margin-calls" target="_blank" rel="noopener">Hedgeweek</a>). Walleye Capital ($17bn) lost 5.9%, its worst month since March 2020, and is restructuring its equity long/short business (<a href="https://hedgeweek.com/news/walleye-capital-restructures-equity-long-short-business-following-5-9-october-loss" target="_blank" rel="noopener">Hedgeweek</a>) and plans to return some capital (<a href="https://www.ft.com/content/fb02c333-a439-4acd-b0b6-e50633ce863e" target="_blank" rel="noopener">FT</a>).</p>
+      <p class="why"><b>Why it matters</b>Hedge funds are a big part of our client base. When they lose money, cut teams and hand capital back, every cost line gets reviewed, data and AI tools included.</p>
+    </article>
+    <article class="story">
+      <span class="kicker">Survey</span>
+      <h3>PwC: fragmented data slows AI at asset managers</h3>
+      <p>In a PwC <a href="https://www.prnewswire.com/news-releases/asset-manager-margins-squeezed-as-infrastructure-bill-climbs-pwc-finds-302926416.html" target="_blank" rel="noopener">report</a> drawing on 150 asset managers and 50 infrastructure providers, 24% named data fragmentation as a major barrier to scaling AI, and 44% favour mixing build, buy and partner. Profit per assets under management is down 19% since 2018.</p>
+      <p class="why"><b>Why it matters</b>Managers want to buy and partner, not build everything, and fragmented data holds them back.</p>
+    </article>
+  </div>
+
+  <div class="section-head"><h2>Competition</h2></div>
+  <div class="columns">
+    <article class="story">
+      <span class="kicker">FactSet · Private markets</span>
+      <h3>FactSet partners with Hamilton Lane on private markets data</h3>
+      <p>FactSet and Hamilton Lane, a private markets investor and adviser, <a href="https://investor.factset.com/news-releases/news-release-details/factset-and-hamilton-lane-announce-strategic-partnership-deliver" target="_blank" rel="noopener">agreed</a> to put Hamilton Lane's data into FactSet's portfolio analytics. Clients will see public and private holdings together.</p>
+      <p class="why"><b>Why it matters</b>Private markets data is becoming competitive, and this is a direct partnership between a data provider and a buy-side firm.</p>
+    </article>
+    <article class="story">
+      <span class="kicker">AI platforms</span>
+      <h3>AI workspaces pitch themselves as the layer above data vendors' MCPs</h3>
+      <p>AlphaSense, Rogo, and Hebbia are AI research tools that sit on top of data, and all three want to be where clients' agents get it. AlphaSense <a href="https://www.alpha-sense.com/resources/product-articles/superanalyst-mcp/" target="_blank" rel="noopener">launched</a> an MCP (the standard way AI tools connect to data) for its SuperAnalyst agent. Its pitch: today a team licenses one MCP for filings, another for transcripts, another for financials, and AlphaSense puts them behind one licence. Rogo <a href="https://rogo.com/blog/rogo-intelligence-value" target="_blank" rel="noopener">says</a> agents using its structured company profiles needed 42% fewer steps than agents using connectors, across about 8,800 tasks. Hebbia is now <a href="https://www.hebbia.com/blog/whats-new-november-disclosure-2026/" target="_blank" rel="noopener">available</a> inside Microsoft Copilot Cowork.</p>
+      <p class="why"><b>Why it matters</b>These platforms are frenemies. They need data, so they are a channel for ours, but they also want to sit between our data and the client, competing directly with us.</p>
+    </article>
+  </div>
+
+  <div class="section-head"><h2>What asset managers are doing</h2></div>
+  <div class="columns">
+    <article class="story">
+      <span class="kicker">Sell side</span>
+      <h3>Citadel Securities builds AI agents with its clients</h3>
+      <p>Citadel Securities, the market maker (separate from Citadel the hedge fund), has met more than 100 client technology teams in the past year and is building agents together with clients (<a href="https://www.ai-street.co/p/citadel-securities-develops-ai-agents" target="_blank" rel="noopener">AI Street</a>).</p>
+      <p class="why"><b>Why it matters</b>The sell side is now competing for the buy side's agent work. Those agents need trusted data, so it is another route for ours to reach clients. We will reach out to Citadel Securities.</p>
+    </article>
+    <article class="story">
+      <span class="kicker">Private credit · Q3 call</span>
+      <h3>Apollo: "Data drives everything."</h3>
+      <p>On Apollo's Q3 <a href="https://www.fool.com/earnings/call-transcripts/2026/11/03/apollo-apo-q3-2026-earnings-call-transcript/" target="_blank" rel="noopener">call</a>, CEO Marc Rowan said Apollo will spend roughly $350m over the next 24 months on data and systems to make private credit easier to price and trade, and will write off its old software. President Jim Zelter put AI and digital infrastructure at about 2.5% to 3% of Apollo.</p>
+      <p class="why"><b>Why it matters</b>One of the largest private credit managers is saying the edge is data.</p>
+    </article>
+    <article class="story">
+      <span class="kicker">Traditional managers</span>
+      <h3>Franklin Templeton: results changed once it added a semantic layer</h3>
+      <p>Franklin Templeton, a global investment management firm, first put its data in a database and connected AI models to it. It didn't produce the answers the teams needed, as the models didn't understand how the data fit together. When the team added agents and a semantic layer, the results changed, according to OpenAI's <a href="https://openai.com/index/franklin-templeton/" target="_blank" rel="noopener">case study</a>.</p>
+      <p class="why"><b>Why it matters</b>Even with a frontier model, the data underneath decides whether the answers are right. More in the concept below.</p>
+    </article>
+    <article class="story">
+      <span class="kicker">KYC</span>
+      <h3>BCG shares lessons from an 11-agent KYC build on Anthropic's tools</h3>
+      <p>BCG <a href="https://www.bcg.com/x/the-multiplier/agentic-ai-kyc-multi-agent-lessons" target="_blank" rel="noopener">built</a> a reference KYC onboarding system on Anthropic's KYC Screener. The system had 11 agents, 17 skills and three MCP connections to data, and a person makes the final decision.</p>
+      <p class="why"><b>Why it matters</b>A KYC agent is only as good as the entity and ownership data it calls, and that is our data.</p>
+    </article>
+  </div>
+
+  <div class="back">
+    <section class="explainer" aria-labelledby="concept">
+      <span class="label">Concept of the week</span>
+      <h3 id="concept">The semantic layer</h3>
+      <p>A semantic layer, which Franklin Templeton added alongside its agents (see above), is a business-friendly layer between complex data and the people who use it: it standardises business definitions and metrics across the organisation, so every report and tool calculates them the same way.</p>
+      <p>Think of a new analyst's first week: before touching the portfolio, someone explains what 'exposure', 'NAV' and 'leverage' mean at this firm and which system holds what. A semantic layer gives the AI that same induction.</p>
+      <p>You'll hear this from clients when they say their AI gives different answers to the same question, or that the hard part is getting it to understand their own data.</p>
+      <p>Explainer from Databricks: <a href="https://www.databricks.com/glossary/semantic-layer" target="_blank" rel="noopener">What is a semantic layer?</a></p>
+    </section>
+
+    <div>
+      <section class="box" aria-labelledby="wyt">
+        <span class="label" id="wyt">Worth your time</span>
+        <h3><a href="https://replit.com/blog/rise-of-self-driving-company" target="_blank" rel="noopener">The Rise of the Self-Driving Company</a></h3>
+        <p>Amjad Masad, co-founder and CEO of Replit, an AI coding platform. A peek at how AI-native companies think about splitting work between agents and people: people set the goals and use judgment, and agents do the work within clear limits on when to act and when to ask. One finance example: at Sumitomo Mitsui Finance and Leasing, one person did in a week what had taken six people six months.</p>
+      </section>
+
+      <section class="box" aria-labelledby="hiring">
+        <span class="label" id="hiring">AI hiring signals</span>
+        <p style="margin:6px 0 0">Hamilton Lane is <a href="https://www.careerbuilder.com/job-details/agentic-ai-solutions-engineer-conshohocken-pa--bc8f1e20-a6cf-4f18-8820-e4a96b3fa3ad" target="_blank" rel="noopener">hiring</a> an Agentic AI Solutions Engineer and says it is investing aggressively in agentic AI. My agent that monitors AI hiring signals at our clients is still running, and last week's report is attached.</p>
+      </section>
+
+      <section class="box" aria-labelledby="diary">
+        <span class="label" id="diary">This week</span>
+        <ul class="diary">
+          <li><span class="when">9 Nov</span><span class="what"><b>SEC roundtable on machine-understandable data</b>, Washington and webcast, with panelists from S&amp;P, Meta and Google. <a href="https://www.sec.gov/newsroom/press-releases/2026-106-sec-announces-roundtable-machine-understandable-data-age-super-intelligence" target="_blank" rel="noopener">SEC</a></span></li>
+          <li><span class="when">9 Nov</span><span class="what"><b>KKR Q3 results</b>. <a href="https://www.businesswire.com/news/home/20260929150919/en/KKR-Co.-Inc.-to-Announce-Third-Quarter-2026-Results" target="_blank" rel="noopener">KKR</a></span></li>
+          <li><span class="when">10 Nov</span><span class="what"><b>FactSet Investor Day</b>, New York and webcast. <a href="https://finviz.com/news/391527/factset-to-host-investor-day-on-november-10-2026" target="_blank" rel="noopener">FactSet</a></span></li>
+          <li><span class="when">11 Nov</span><span class="what"><b>Databricks Data + AI World Tour</b>, London. <a href="https://www.databricks.com/dataaisummit/worldtour" target="_blank" rel="noopener">Databricks</a></span></li>
+        </ul>
+      </section>
+
+      <section class="box" aria-labelledby="coming">
+        <span class="label" id="coming">Coming up</span>
+        <ul class="diary">
+          <li><span class="when">17 Nov</span><span class="what"><b>MSCI EMEA Investment &amp; Risk Summit</b>, London. <a href="https://www.msci.com/discover-msci/events/MSCI-EMEA-Investment-and-Risk-Summit-2026" target="_blank" rel="noopener">MSCI</a></span></li>
+          <li><span class="when">24–25 Nov</span><span class="what"><b>FT Future of Asset Management Europe</b>, London. <a href="https://www.luxembourgforfinance.com/?p=20544" target="_blank" rel="noopener">Luxembourg for Finance</a></span></li>
+          <li><span class="when">17 Nov</span><span class="what"><b>Results to listen to for AI</b>: Nvidia 17 Nov (<a href="https://nvidianews.nvidia.com/news/nvidia-sets-conference-call-for-third-quarter-financial-results-6928873" target="_blank" rel="noopener">Nvidia</a>).</span></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    <span>Edited by Alvaro de Pastors</span>
+    <span>Every fact linked to its source</span>
+  </footer>
+</div>
+</body>
+</html>
